@@ -1,4 +1,5 @@
-﻿#include <stdio.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
 #include <Windows.h>
 
 #define NUM_ELEMENTS 10
@@ -95,6 +96,30 @@ void insertElement(int insIndex,int value) {
 	n++;
 	arr[insIndex] = value;
 }
+void readfromfile() {
+	FILE* fin = fopen("C:\\Users\\F1rsTTeaM\\Desktop\\in7.txt", "rt");
+	if (fin == NULL) {
+		printf("Файл не найден\n");
+		return;
+	}
+	fscanf(fin, "%d", &n);
+	for (int i = 0;i < n;i++) {
+		fscanf(fin, "%d", &arr[i]);
+	}
+	fclose(fin);
+}
+void loadtofile() {
+	FILE* fout = fopen("C:\\Users\\F1rsTTeaM\\Desktop\\out8.txt", "wt");
+	if (fout == NULL) {
+		printf("Файл не создался\n");
+		return;
+	}
+	fprintf(fout, "%d\n", n);
+	for (int i = 0;i < n;i++) {
+		fprintf(fout, "%d ", arr[i]);
+	}
+	fclose(fout);
+}
 
 void main() {
 	SetConsoleCP(1251);
@@ -118,6 +143,8 @@ void main() {
 		printf("12: Вставить новый элемент в заданное место\n");
 		printf("13: Удалить минимальный элемент\n");
 		printf("14: Вставить перед минимальным элементом 0\n");
+		printf("15: Загрузить массив ИЗ файла\n");
+		printf("16: Загрузить массив В файл\n");
 		printf("\n");
 		printf("0: Выйти из программы\n");
 		printf("Выбранная операция >>>>>>>>> ");
@@ -220,6 +247,18 @@ void main() {
 			insertElement(indexMin + 1, 0);
 		}
 		break;
+
+		case 15:
+			readfromfile();
+			printElements();
+			break;
+
+		case 16:
+			loadtofile();
+			printElements();
+			break;
+
+
 
 		}
 	} while (item != 0);
