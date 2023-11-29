@@ -25,11 +25,11 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса глав�
 int map[N][M] = {
     {0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
     {0, 1, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
-    {0, 0, 0, 2, 0,   0, 0, 2, 0, 0,   0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0,   0, 0, 2, 3, 0,   0, 0, 0, 0, 0},
+    {0, 0, 2, 2, 0,   0, 0, 2, 0, 0,   0, 0, 0, 0, 0},
+    {0, 0, 2, 0, 0,   0, 0, 2, 0, 0,   0, 0, 0, 0, 0},
+    {0, 0, 2, 2, 0,   2, 2, 2, 3, 0,   0, 0, 0, 0, 0},
 
-    {0, 0, 0, 0, 0,   0, 0, 3, 3, 0,   0, 0, 0, 0, 0},
+    {0, 0, 0, 2, 2,   2, 0, 3, 3, 0,   0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 3, 0, 0},
     {0, 0, 0, 2, 0,   0, 3, 0, 0, 0,   0, 0, 0, 0, 0},
@@ -334,6 +334,23 @@ void destroyGold() {
         }
     }
 }
+void doMidasHand(int i, int j) {
+    if (map[i][j] == 2) {
+        map[i][j] = 3;
+        if (i > 0) doMidasHand(i - 1, j);
+        if (i < N - 1)doMidasHand(i + 1, j);
+        if (j > 0) doMidasHand(i, j - 1);
+        if (j < M - 1) doMidasHand(i, j + 1);
+    }
+}
+void midasHandToRight() {
+    for (int i = 0;i < N;i++) {
+        for (int j = 0;j < M - 1;++j) {
+            if (map[i][j] == 1 && map[i][j + 1] == 2)
+                doMidasHand(i, j + 1);
+        }
+    }
+}
 
 
 
@@ -389,6 +406,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case 0x44:
             destroyGold();
             InvalidateRect(hWnd, NULL, TRUE);
+        case 0x4d:
+            midasHandToRight();
+            InvalidateRect(hWnd, NULL, TRUE);
+            break;
 
 
         }
